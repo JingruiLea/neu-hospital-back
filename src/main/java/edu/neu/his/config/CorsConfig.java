@@ -7,9 +7,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @Configuration
 public class CorsConfig extends WebMvcConfigurerAdapter {
+    @Override
     public void addInterceptors(InterceptorRegistry registry) {
         CrossInterceptor crossInterceptor = new CrossInterceptor();
         registry.addInterceptor(crossInterceptor).addPathPatterns("/**");
         super.addInterceptors(registry);
     }
+
+
 }

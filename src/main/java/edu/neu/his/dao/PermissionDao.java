@@ -1,4 +1,12 @@
 package edu.neu.his.dao;
 
-public class PermissionDao {
+import edu.neu.his.bean.Permission;
+
+import java.util.List;
+
+public interface PermissionDao {
+
+    public List<Permission> findAll();
+
+    public List<Permission> findByAdminUserId(int userId);
 }

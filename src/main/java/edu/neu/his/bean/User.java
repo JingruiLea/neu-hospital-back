@@ -1,9 +1,20 @@
-package edu.neu.his.newtype.user;
+package edu.neu.his.bean;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.List;
 
 public class User {
     private int id;
     private String username;
     private String password;
+
+    public User(String username, String password, List<GrantedAuthority> grantedAuthorities) {
+
+    }
+
+
 
     public void setId(int id) {
         this.id = id;

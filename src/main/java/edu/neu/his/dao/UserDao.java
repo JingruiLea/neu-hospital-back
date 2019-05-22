@@ -1,4 +1,4 @@
-package edu.neu.his.mapper;
+package edu.neu.his.dao;
 
 import edu.neu.his.bean.User;
 import org.apache.ibatis.annotations.*;
@@ -6,10 +6,10 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 @Mapper
-public interface UserMapper {
+public interface UserDao {
 
     @Select("SELECT * FROM USER WHERE username = #{name}")
-    List<User> findByName(@Param("username") String username);
+    List<User> findByUsername(@Param("username") String username);
 
     @Insert("INSERT INTO user(username, password) VALUES(#{username}, #{password})")
     void insert(User user);
