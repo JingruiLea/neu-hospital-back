@@ -14,7 +14,8 @@ public class LoginController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @GetMapping("/get")
+
+    @PostMapping("/user/login")
     public Map userLogin() {
         HashMap res = new HashMap();
         res.put("msg","hello");
