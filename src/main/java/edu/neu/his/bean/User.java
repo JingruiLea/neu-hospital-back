@@ -1,4 +1,4 @@
-package edu.neu.his.newtype.user;
+package edu.neu.his.bean;
 
 public class User {
     private int id;
