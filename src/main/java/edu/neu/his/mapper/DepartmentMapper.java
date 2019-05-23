@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Mapper
-@Component(value = "DepartmentDao")
+@Component(value = "DepartmentMapper")
 public interface DepartmentMapper {
     @Select("SELECT * FROM DEPARTMENT WHERE name = #{name}")
     List<Department> findByName(@Param("name") String name);
@@ -15,7 +15,7 @@ public interface DepartmentMapper {
     @Insert("INSERT INTO department(id, name, classification) VALUES(#{id}, #{name}, #{classification})")
     void insert(Department department);
 
-    @Update("UPDATE user SET name = #{name}, classification = #{classification} WHERE id = #{id}")
+    @Update("UPDATE department SET name = #{name}, classification = #{classification} WHERE id = #{id}")
     void update(Department department);
 
     @Select("SELECT * FROM DEPARTMENT")
