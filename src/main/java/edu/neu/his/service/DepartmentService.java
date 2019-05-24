@@ -34,6 +34,11 @@ public class DepartmentService {
     }
 
     @Transactional
+    public List<String> findAllClassification() {
+        return departmentMapper.findAllClassification();
+    }
+
+    @Transactional
     public void deleteDepartment(int id) {
         departmentMapper.deleteDepartment(id);
     }

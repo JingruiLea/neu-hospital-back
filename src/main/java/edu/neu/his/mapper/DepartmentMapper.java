@@ -12,6 +12,9 @@ public interface DepartmentMapper {
     @Select("SELECT * FROM DEPARTMENT WHERE name = #{name}")
     List<Department> findByName(@Param("name") String name);
 
+    @Select("SELECT classification FROM DEPARTMENT")
+    List<String> findAllClassification();
+
     @Insert("INSERT INTO department(id, name, classification) VALUES(#{id}, #{name}, #{classification})")
     void insert(Department department);
 
