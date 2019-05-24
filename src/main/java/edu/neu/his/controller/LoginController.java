@@ -9,13 +9,13 @@ import java.util.Map;
 @RequestMapping("/")
 public class LoginController {
 
-    @PostMapping("/login")
-    public Map userLogin(@RequestBody Map req) {
-
-        HashMap res = new HashMap();
-        res.put("msg","hello");
-        return res;
-    }
+//    @PostMapping("/login")
+//    public Map userLogin(@RequestBody Map req) {
+//
+//        HashMap res = new HashMap();
+//        res.put("msg","hello");
+//        return res;
+//    }
 
    @PostMapping("/post")
    public Map userRegister(@RequestBody Map req) {

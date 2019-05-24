@@ -5,6 +5,7 @@ import edu.neu.his.dao.UserInfoDao;
 import edu.neu.his.exception.NoSuchUserException;
 import edu.neu.his.utils.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -18,6 +19,7 @@ public class UserController {
     @Autowired
     UserInfoDao userInfoDao;
 
+    @PreAuthorize("hasAuthority('Userinfo')")
     @GetMapping("/{id}")
     public Map getUserInfo(@PathVariable("id") int id){
         List<UserInfo> l = userInfoDao.findByUserId(id);
@@ -33,6 +35,6 @@ public class UserController {
     @PutMapping("/{id}")
     public Map updateUserInfo(@PathVariable("id") int id, @RequestBody UserInfo userInfo){
         List<UserInfo> l = userInfoDao.findByUserId(id);
-        
+        return  null;
     }
 }

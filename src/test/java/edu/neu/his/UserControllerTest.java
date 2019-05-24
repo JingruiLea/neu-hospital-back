@@ -9,8 +9,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -23,9 +27,15 @@ public class UserControllerTest {
 
     @Test
     public void testList() throws Exception {
+        RequestBuilder requestBuilder = formLogin().user("username").password("passowrd");
+        mockMvc.perform(requestBuilder)
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(cookie().exists("JSESSIONID"));
         mockMvc.perform(MockMvcRequestBuilders.get("/user/info"))
                 .andExpect(status().isOk());
     }
+
 
     @Test
     public void testListWithUser() throws Exception {
