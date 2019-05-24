@@ -2,7 +2,6 @@ package edu.neu.his.service;
 
 import edu.neu.his.bean.Permission;
 import edu.neu.his.bean.User;
-import edu.neu.his.bean.UserPrincipal;
 import edu.neu.his.dao.PermissionDao;
 import edu.neu.his.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,7 @@ public class CustomUserService implements UserDetailsService { //自定义UserDe
 
     @Autowired
     UserDao userDao;
+
     @Autowired
     PermissionDao permissionDao;
 
@@ -31,7 +31,6 @@ public class CustomUserService implements UserDetailsService { //自定义UserDe
             List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
             for (Permission permission : permissions) {
                 if (permission != null && permission.getName()!=null) {
-
                     GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(permission.getName());
                     grantedAuthorities.add(grantedAuthority);
                 }
