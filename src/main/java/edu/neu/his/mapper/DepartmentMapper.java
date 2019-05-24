@@ -12,13 +12,13 @@ public interface DepartmentMapper {
     @Select("SELECT * FROM DEPARTMENT WHERE name = #{name}")
     List<Department> findByName(@Param("name") String name);
 
-    @Select("SELECT classification FROM DEPARTMENT")
+    @Select("SELECT name FROM department_classification")
     List<String> findAllClassification();
 
-    @Insert("INSERT INTO department(id, name, classification) VALUES(#{id}, #{name}, #{classification})")
+    @Insert("INSERT INTO department(code, name, classification) VALUES(#{code}, #{name}, #{classification})")
     void insert(Department department);
 
-    @Update("UPDATE department SET name = #{name}, classification = #{classification} WHERE id = #{id}")
+    @Update("UPDATE department SET code = #{code}, name = #{name}, classification = #{classification} WHERE id = #{id}")
     void update(Department department);
 
     @Select("SELECT * FROM DEPARTMENT")

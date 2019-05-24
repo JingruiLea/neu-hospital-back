@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -15,7 +16,7 @@ public class DepartmentManageController {
     @Autowired
     private DepartmentService departmentService;
 
-    @GetMapping("/findByName")
+    @PostMapping("/findByName")
     @ResponseBody
     public Map departmentFindByName(@RequestBody Map req){
         String name = (String)req.get("name");
@@ -30,13 +31,20 @@ public class DepartmentManageController {
     @ResponseBody
     public Map listAllDepartment(){
         Map res = new HashMap();
+        List<Department> list = departmentService.findAll();
+        int len = list.size();
+        int[] keys = new int[len];
+        for(int i=0; i<len; i++){
+            keys[i]=list.get(i).getId();
+        }
         res.put("code",200);
         res.put("msg","");
-        res.put("data",departmentService.findAll());
+        res.put("key", keys);
+        res.put("data",list);
         return res;
     }
 
-    @GetMapping("/classification")
+    @GetMapping("/getAllClassification")
     @ResponseBody
     public Map listAllClassification(){
         Map res = new HashMap();
@@ -46,38 +54,56 @@ public class DepartmentManageController {
         return res;
     }
 
-  //  @PostMapping("/update")
-  //  @ResponseBody
-  //  public Map updateDepartment(@RequestBody Map req){
-   //     departmentService.updateDepartment(department);
-   // }
+    @PostMapping("/update")
+    @ResponseBody
+    public Map updateDepartment(@RequestBody Map req){
+        Map res = new HashMap();
+        int id = (int)req.get("id");
+        String code = (String)req.get("code");
+        String name = (String)req.get("name");
+        String classification = (String)req.get("classification");
+
+        if(canUpdate(id,name,code,classification)) {
+            Department department = new Department(id, code, name, classification, isClinical(name));
+            departmentService.updateDepartment(department);
+            res.put("code", 200);
+            res.put("msg", "");
+            res.put("data", department);
+        }else{
+            res.put("code", 500);
+            res.put("msg", "The code/name has existed," +
+                    "or there isn't such a classification in the department_classification table.");
+            res.put("data", null);
+        }
+
+        return res;
+    }
 
     @PostMapping("/add")
     @ResponseBody
     public Map insertDepartment(@RequestBody Map req){
-        int id = (int)req.get("code");
+        String code = (String)req.get("code");
         String name = (String)req.get("name");
         String classification = (String)req.get("classification");
         Department department = new Department();
-        department.setId(id);
+        department.setCode(code);
         department.setName(name);
         department.setClassification(classification);
-        if(isClinical(name))
-            department.setIs_clinical(true);
-        else
-            department.setIs_clinical(false);
-
         Map res = new HashMap();
-        try {
+
+        if(canOperate(name,code,classification)){
+            department.setIs_clinical(isClinical(name));
             departmentService.insertDepartment(department);
-            res.put("code",200);
-            res.put("msg","");
-            res.put("data",department);
-        }catch(Exception ex){
-            res.put("code",500);
-            res.put("msg","The code or name has existed.");
-            res.put("data",null);
+            res.put("code", 200);
+            res.put("msg", "");
+            res.put("data", department);
+        }else {
+            res.put("code", 500);
+            res.put("msg", "The code/name has existed," +
+                    "or there isn't such a classification in the department_classification table.");
+            res.put("data", null);
         }
+
         return res;
     }
 
@@ -97,10 +123,44 @@ public class DepartmentManageController {
     }
 
     private boolean isClinical(String name){
-        if(name.equals("超声科")||name.equals("检验科")||name.equals("手术室")||name.equals("核医学科")||name.equals("放射科"))
+        if(name.equals("超声科")||name.equals("检验科")||name.equals("手术室")
+                ||name.equals("核医学科")||name.equals("放射科"))
             return false;
         else
             return true;
+    }
+
+    private boolean canOperate(String name, String code, String classification){
+        List<Department> list = departmentService.findAll();
+        for(int i=0; i<list.size(); i++){
+            if(list.get(i).getName().equals(name)||list.get(i).getCode().equals(code))
+                return false;
+        }
+
+        List<String> cla = departmentService.findAllClassification();
+        for(int i=0; i<cla.size(); i++){
+            if(cla.get(i).equals(classification))
+                return true;
+        }
+
+        return false;
+    }
+
+    private boolean canUpdate(int id, String name, String code, String classification){
+        List<Department> list = departmentService.findAll();
+        for(int i=0; i<list.size(); i++){
+            if((list.get(i).getName().equals(name)||list.get(i).getCode().equals(code))
+                    && list.get(i).getId()!=id)
+                return false;
+        }
+
+        List<String> cla = departmentService.findAllClassification();
+        for(int i=0; i<cla.size(); i++){
+            if(cla.get(i).equals(classification))
+                return true;
+        }
+
+        return false;
     }
 
 }
